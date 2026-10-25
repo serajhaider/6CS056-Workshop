@@ -1,3 +1,5 @@
+@php($course ??= new \App\Models\Course())
+
 @if ($errors->any())
     <div class="notice notice-error" role="alert">
         <p>Please correct the following errors:</p>

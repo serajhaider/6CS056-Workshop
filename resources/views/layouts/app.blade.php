@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Training Institute') | Workshop 1</title>
+    <title>@yield('title', 'Training Institute') | Workshop 2</title>
     @vite('resources/css/app.css')
 </head>
 <body>
@@ -26,7 +26,7 @@
     </main>
 
     <footer class="site-footer">
-        <div class="container">6CS056 Workshop 1</div>
+        <div class="container">6CS056 Workshop 2</div>
     </footer>
 </body>
 </html>

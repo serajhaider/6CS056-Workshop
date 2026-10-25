@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\In;
 use Illuminate\View\View;
 
 class CourseController extends Controller
@@ -30,45 +28,47 @@ class CourseController extends Controller
 
         $course = Course::create($validated);
 
-        return Redirect::route('courses.show', $course)
+        return redirect()
+            ->route('courses.show', $course)
             ->with('success', 'Course created successfully.');
     }
 
-    public function show(int $id): View
+    public function show(Course $course): View
     {
         return view('course.detail', [
-            'course' => Course::findOrFail($id),
+            'course' => $course,
         ]);
     }
 
-    public function edit(int $id): View
+    public function edit(Course $course): View
     {
         return view('course.edit', [
-            'course' => Course::findOrFail($id),
+            'course' => $course,
         ]);
     }
 
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, Course $course): RedirectResponse
     {
-        $course = Course::findOrFail($id);
         $course->update($request->validate($this->rules()));
 
-        return Redirect::route('courses.show', $course)
+        return redirect()
+            ->route('courses.show', $course)
             ->with('success', 'Course updated successfully.');
     }
 
-    public function destroy(int $id): RedirectResponse
+    public function destroy(Course $course): RedirectResponse
     {
-        Course::findOrFail($id)->delete();
+        $course->delete();
 
-        return Redirect::route('courses.index')
+        return redirect()
+            ->route('courses.index')
             ->with('success', 'Course deleted successfully.');
     }
 
     /**
      * Get the validation rules for course forms.
      *
-     * @return array<string, array<int, string|In>>
+     * @return array<string, array<int, string|Rule>>
      */
     private function rules(): array
     {

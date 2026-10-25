@@ -30,4 +30,13 @@ class Student extends Model
             'date_of_birth' => 'date',
         ];
     }
+
+    public function getAgeAttribute(): ?int
+    {
+        if (! $this->date_of_birth) {
+            return null;
+        }
+
+        return $this->date_of_birth->diffInYears(now());
+    }
 }
