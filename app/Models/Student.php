@@ -37,6 +37,6 @@ class Student extends Model
             return null;
         }
 
-        return $this->date_of_birth->diffInYears(now());
+        return (int) $this->date_of_birth->diffInYears(now());
     }
 }
