@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
-use Illuminate\View\View;       
 
 class StudentController extends Controller
 {
-       public function index()
+    public function index()
     {
         $students = Student::all();
 
@@ -20,7 +17,7 @@ class StudentController extends Controller
         ]);
     }
 
-     public function create()
+    public function create()
     {
         return view('student.create');
     }
@@ -94,13 +91,4 @@ class StudentController extends Controller
             ->route('students.index')
             ->with('success', 'Student deleted successfully!');
     }
-
-    
-
-
-   
-
-  
-
-
 }

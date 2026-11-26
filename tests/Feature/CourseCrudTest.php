@@ -3,12 +3,20 @@
 namespace Tests\Feature;
 
 use App\Models\Course;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CourseCrudTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create(['role' => 'user']));
+    }
 
     public function test_course_can_be_created_viewed_updated_and_deleted(): void
     {
@@ -22,7 +30,7 @@ class CourseCrudTest extends TestCase
         ];
 
         $this->get(route('courses.index'))
-            ->assertSee('No courses found.');
+            ->assertSee('No courses belong to you yet.');
 
         $this->get(route('courses.create'))
             ->assertSee('Course name')

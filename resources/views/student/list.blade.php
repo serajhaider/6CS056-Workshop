@@ -6,7 +6,7 @@
     <div class="page-heading">
         <div>
             <h1>Students</h1>
-            <p class="muted">View and manage student records.</p>
+            <p class="muted">Student records are shared across the institute. All authenticated users can manage them.</p>
         </div>
         <a class="button" href="{{ route('students.create') }}">Add student</a>
     </div>

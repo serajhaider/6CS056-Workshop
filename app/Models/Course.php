@@ -20,6 +20,11 @@ class Course extends Model
         'is_active',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Course;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,6 +25,7 @@ class CourseFactory extends Factory
             'fee' => fake()->randomFloat(2, 0, 5000),
             'difficulty' => fake()->randomElement(['Easy', 'Medium', 'Hard']),
             'is_active' => fake()->boolean(80),
+            'user_id' => User::factory(),
         ];
     }
 }

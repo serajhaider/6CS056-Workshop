@@ -6,7 +6,11 @@
     <div class="page-heading">
         <div>
             <h1>Courses</h1>
-            <p class="muted">View and manage course records.</p>
+            @if (auth()->user()->role === 'admin')
+                <p class="muted">Administrator view: all users' courses are shown, and you can manage any course.</p>
+            @else
+                <p class="muted">Regular user view: only your courses are shown. You can manage your own courses, not another user's.</p>
+            @endif
         </div>
         <a class="button" href="{{ route('courses.create') }}">Add course</a>
     </div>
@@ -17,6 +21,9 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
+                    @if (auth()->user()->role === 'admin')
+                        <th scope="col">Owner</th>
+                    @endif
                     <th scope="col">Duration</th>
                     <th scope="col">Fee</th>
                     <th scope="col">Difficulty</th>
@@ -29,6 +36,9 @@
                     <tr>
                         <td>{{ $course->id }}</td>
                         <td>{{ $course->name }}</td>
+                        @if (auth()->user()->role === 'admin')
+                            <td>{{ $course->user->name }}</td>
+                        @endif
                         <td>{{ $course->duration }} weeks</td>
                         <td>{{ number_format((float) $course->fee, 2) }}</td>
                         <td>{{ $course->difficulty }}</td>
@@ -47,7 +57,9 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="empty-state">No courses found.</td>
+                        <td colspan="{{ auth()->user()->role === 'admin' ? 8 : 7 }}" class="empty-state">
+                            No {{ auth()->user()->role === 'admin' ? 'courses exist' : 'courses belong to you yet' }}.
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CourseController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $courses = $request->user()->role === 'admin'
+            ? Course::query()->with('user')->latest()->get()
+            : $request->user()->courses()->latest()->get();
+
         return view('course.list', [
-            'courses' => Course::query()->orderBy('name')->get(),
+            'courses' => $courses,
         ]);
     }
 
@@ -26,7 +31,7 @@ class CourseController extends Controller
     {
         $validated = $request->validate($this->rules());
 
-        $course = Course::create($validated);
+        $course = $request->user()->courses()->create($validated);
 
         return redirect()
             ->route('courses.show', $course)
@@ -35,6 +40,8 @@ class CourseController extends Controller
 
     public function show(Course $course): View
     {
+        Gate::authorize('manage-course', $course);
+
         return view('course.detail', [
             'course' => $course,
         ]);
@@ -42,6 +49,8 @@ class CourseController extends Controller
 
     public function edit(Course $course): View
     {
+        Gate::authorize('manage-course', $course);
+
         return view('course.edit', [
             'course' => $course,
         ]);
@@ -49,6 +58,7 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course): RedirectResponse
     {
+        Gate::authorize('manage-course', $course);
         $course->update($request->validate($this->rules()));
 
         return redirect()
@@ -58,6 +68,7 @@ class CourseController extends Controller
 
     public function destroy(Course $course): RedirectResponse
     {
+        Gate::authorize('manage-course', $course);
         $course->delete();
 
         return redirect()

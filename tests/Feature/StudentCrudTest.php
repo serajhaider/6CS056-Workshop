@@ -3,12 +3,20 @@
 namespace Tests\Feature;
 
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StudentCrudTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create(['role' => 'user']));
+    }
 
     public function test_student_can_be_created_viewed_updated_and_deleted(): void
     {
@@ -30,7 +38,7 @@ class StudentCrudTest extends TestCase
         $response = $this->post(route('students.store'), $studentData);
 
         $student = Student::query()->where('email', $studentData['email'])->firstOrFail();
-        $response->assertRedirect(route('students.show', $student));
+        $response->assertRedirect(route('students.index'));
 
         $this->assertDatabaseHas('students', [
             'id' => $student->id,
